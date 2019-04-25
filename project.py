@@ -20,6 +20,7 @@ class  NeuralNetWork:
         '''
         self.wih = numpy.random.rand(self.hnodes, self.inodes) - 0.5
         self.who = numpy.random.rand(self.onodes, self.hnodes) - 0.5
+        #pylint: disable=no-member
         self.activation_function = lambda x:scipy.special.expit(x)
 
     def train(self, inputs_list, targets_list):
@@ -69,11 +70,32 @@ output_nodes = 10
 learning_rate = 0.3
 n = NeuralNetWork(input_nodes, hidden_nodes, output_nodes, learning_rate)
 
+print("==================Before Train================")
+test_data_file = open("test.csv")
+test_data_list = test_data_file.readlines()
+test_data_file.close()
+scores = []
+for record in test_data_list:
+    all_values = record.split(',')
+    correct_number = int(all_values[0])
+    #预处理数字图片
+    inputs = (numpy.asfarray(all_values[1:])) / 255.0 * 0.99 + 0.01
+    #让网络判断图片对应的数字
+    outputs = n.query(inputs)
+    #找到数值最大的神经元对应的编号
+    label = numpy.argmax(outputs)
+    if label == correct_number:
+        scores.append(1)
+    else:
+        scores.append(0)
+scores_array = numpy.asarray(scores)
+print("perfermance = ", scores_array.sum() / scores_array.size)
+
 #读入训练数据
 #open函数里的路径根据数据存储的路径来设定
-training_data_file = open("mnist_train.csv")
+print("==================Training================")
+training_data_file = open("train.csv")
 trainning_data_list = training_data_file.readlines()
-print(len(trainning_data_list))
 training_data_file.close()
 
 print('Training begin~~~')
@@ -92,7 +114,8 @@ print('Training complete!!!')
         # print (inputs.shape)
         # print (targets.shape)
 
-test_data_file = open("mnist_test.csv")
+print("==================After Train================")
+test_data_file = open("test.csv")
 test_data_list = test_data_file.readlines()
 test_data_file.close()
 scores = []

@@ -20,6 +20,7 @@ class  NeuralNetWork:
         '''
         self.wih = numpy.random.rand(self.hnodes, self.inodes) - 0.5
         self.who = numpy.random.rand(self.onodes, self.hnodes) - 0.5
+        #pylint: disable=no-member
         self.activation_function = lambda x:scipy.special.expit(x)
 
     def train(self, inputs_list, targets_list):
@@ -69,7 +70,7 @@ n = NeuralNetWork(input_nodes, hidden_nodes, output_nodes, learning_rate)
 # n.query([1.0, 0.5, -1.5])
 
 #open函数里的路径根据数据存储的路径来设定
-data_file = open("mnist_train.csv")
+data_file = open("mnist_test.csv")
 data_list = data_file.readlines()
 data_file.close()
 # print(data_list[3])
